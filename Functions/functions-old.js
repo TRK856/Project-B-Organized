@@ -1,33 +1,32 @@
 // code needed to activate certain funtions
 // drawBubbles {
-    // document.addEventListener("keydown", keydownHandler)
+// document.addEventListener("keydown", keydownHandler)
 
-    // let bubbles = [];
+// let bubbles = [];
 
-    // requestAnimationFrame(drawBubbles);
+// requestAnimationFrame(drawBubbles);
 
-    // setInterval(addBubble, 1000)
+// setInterval(addBubble, 1000)
 // }
 
 // makeItSnow {
-    // let Snows = [];
+// let Snows = [];
 
-    // setInterval(addSnow, 1000)
+// setInterval(addSnow, 1000)
 
-    // document.addEventListener("keydown", keydownHandler);
+// document.addEventListener("keydown", keydownHandler);
 
-    // requestAnimationFrame(drawSnows);
+// requestAnimationFrame(drawSnows);
 // }
-
 
 // walk through functions (basic draw functions)
 function stroke(style, lineWidth) {
     ctx.strokeStyle = style;
-    ctx.lineWidth = lineWidth
+    ctx.lineWidth = lineWidth;
 }
 
 function fill(style) {
-ctx.fillStyle = style;
+    ctx.fillStyle = style;
 }
 
 function line(x1, y1, x2, y2) {
@@ -41,7 +40,7 @@ function rect(x, y, w, h, mode) {
     if (mode === "fill") {
         ctx.fillRect(x, y, w, h);
     } else if (mode === "stroke") {
-        ctx.filstrokeRect(x, y, w, h);
+        ctx.strokeRect(x, y, w, h);
     }
 }
 
@@ -77,73 +76,75 @@ function triangle(x1, y1, x2, y2, x3, y3, mode) {
 }
 
 // walthrough functions (random libary)
-function randomDec(low, high){
-    return Math.random() * (high - low) + low
+function randomDec(low, high) {
+    return Math.random() * (high - low) + low;
 }
 
-function randomInt(low, high){
+function randomInt(low, high) {
     return Math.floor(Math.random() * (high - low) + low);
 }
 
-function randomRGB(){
-    let r = randomInt(0, 256), g = randomInt(0, 256), b = randomInt(0, 256);
-    return "rgb("+ r +", "+ g +", "+ b +")";
+function randomRGB() {
+    let r = randomInt(0, 256),
+        g = randomInt(0, 256),
+        b = randomInt(0, 256);
+    return "rgb(" + r + ", " + g + ", " + b + ")";
 }
 
 // walkthrough functions (bubbles functions)
-function createRandomBubbleArray(total){
+function createRandomBubbleArray(total) {
     let temp = [];
-    for(let n = 1; n <= total; n++){
+    for (let n = 1; n <= total; n++) {
         temp.push(newRandomBubble());
     }
     return temp;
 }
 
-function newBubble(initX, initY, initR, initColor){
-    return{
-        x:initX,
-        y:initY,
-        r:initR,
-        color:initColor
-    }
+function newBubble(initX, initY, initR, initColor) {
+    return {
+        x: initX,
+        y: initY,
+        r: initR,
+        color: initColor,
+    };
 }
 
-function drawBubble(aBubble){
-    stroke(aBubble.color)
-    circle(aBubble.x, aBubble.y, aBubble.r, "stroke")
+function drawBubble(aBubble) {
+    stroke(aBubble.color);
+    circle(aBubble.x, aBubble.y, aBubble.r, "stroke");
 }
 
-function moveBubble(aBubble){
+function moveBubble(aBubble) {
     aBubble.x += randomInt(-2, 3);
     aBubble.y += randomInt(-2, 3);
 }
 
-function newRandomBubble(initX, initY, initR, initColor){
-    return{
-        x:randomInt(0, cnv.width),
-        y:randomInt(0, cnv.height),
-        r:randomInt(5, 35),
-        color:randomRGB()
-    }
+function newRandomBubble(initX, initY, initR, initColor) {
+    return {
+        x: randomInt(0, cnv.width),
+        y: randomInt(0, cnv.height),
+        r: randomInt(5, 35),
+        color: randomRGB(),
+    };
 }
 
 function keydownHandler(event) {
     if (event.keyCode === 39) {
-        addBubble()
+        addBubble();
     } else if (event.keyCode === 37) {
         bubbles.pop();
     }
 }
 
-function background(color){
+function background(color) {
     fill(color);
-    rect(0, 0, cnv.width, cnv.height, "fill")
+    rect(0, 0, cnv.width, cnv.height, "fill");
 }
 
-function drawBubbles(){
-    background("pink")
+function drawBubbles() {
+    background("pink");
 
-    for(let i = 0; i < bubbles.length; i++){
+    for (let i = 0; i < bubbles.length; i++) {
         moveBubble(bubbles[i]);
         drawBubble(bubbles[i]);
     }
@@ -155,10 +156,16 @@ function addBubble() {
 }
 
 // my functions (draw functions assginment)
-function drawAStar(starCenterX, starCenterY, numberOfSpikes, outerDepth, innerDepth, [fill, stroke]) {
+function drawAStar(
+    starCenterX,
+    starCenterY,
+    numberOfSpikes,
+    outerDepth,
+    innerDepth,
+    [fill, stroke]
+) {
     // define our varibles that need to remain constant
-    let
-        angle = 0,
+    let angle = 0,
         step = Math.PI / numberOfSpikes;
     // begin path
     ctx.beginPath();
@@ -191,10 +198,10 @@ function drawAStar(starCenterX, starCenterY, numberOfSpikes, outerDepth, innerDe
     }
 
     // gives the abilty to have both "stroke" and "fill" activated on the same time
-    if (fill === true && stroke === true){
+    if (fill === true && stroke === true) {
         ctx.fill();
         ctx.closePath();
-        ctx.stroke()
+        ctx.stroke();
     } else if (stroke === true) {
         ctx.closePath();
         ctx.stroke();
@@ -203,34 +210,39 @@ function drawAStar(starCenterX, starCenterY, numberOfSpikes, outerDepth, innerDe
     }
 }
 
-function drawRealisticTriangle(x1, y1, x2, y2, x3, y3, [drawThirdLine]) {    
+function drawRealisticTriangle(x1, y1, x2, y2, x3, y3, [drawThirdLine]) {
     // center triangle
-    triangle(x1, y1, x2, y2, x3, y3, "stroke")
+    triangle(x1, y1, x2, y2, x3, y3, "stroke");
 
-    //small line on each side of the triangle 
-    line(x1, y1, x1 - 20, y1 - 15)
-    line(x2, y2, x2 - 20, y2 - 15)
-    line(x3, y3, x3 - 20, y3 - 15)
+    //small line on each side of the triangle
+    line(x1, y1, x1 - 20, y1 - 15);
+    line(x2, y2, x2 - 20, y2 - 15);
+    line(x3, y3, x3 - 20, y3 - 15);
 
     // draw lines to make it realistic
-    line(x2 - 20, y2 - 15,  x1 - 20, y1 - 15)
-    line(x3 - 20, y3 - 15,  x1 - 20, y1 - 15)
+    line(x2 - 20, y2 - 15, x1 - 20, y1 - 15);
+    line(x3 - 20, y3 - 15, x1 - 20, y1 - 15);
 
     // check if to draw thrid line
     if (drawThirdLine === true) {
-        line(x3 - 20, y3 - 15,  x2 - 20, y2 - 15)
+        line(x3 - 20, y3 - 15, x2 - 20, y2 - 15);
     }
 }
 
-function drawAnyShape(shapeCenterX, shapeCenterY, numberOfSides, size, [fill, stroke]) {
+function drawAnyShape(
+    shapeCenterX,
+    shapeCenterY,
+    numberOfSides,
+    size,
+    [fill, stroke]
+) {
     ctx.save();
-    ctx.translate(shapeCenterX,shapeCenterY);
+    ctx.translate(shapeCenterX, shapeCenterY);
     ctx.rotate(0.8); //Rotate the canvas by 90 degrees
 
     // define our varibles that need to remain constant
-    let
-        angle = 0,
-        step = Math.PI * 2 / numberOfSides;
+    let angle = 0,
+        step = (Math.PI * 2) / numberOfSides;
     // begin path
     ctx.beginPath();
 
@@ -247,10 +259,10 @@ function drawAnyShape(shapeCenterX, shapeCenterY, numberOfSides, size, [fill, st
     }
 
     // gives the abilty to have both "stroke" and "fill" activated on the same time
-    if (fill === true && stroke === true){
+    if (fill === true && stroke === true) {
         ctx.fill();
         ctx.closePath();
-        ctx.stroke()
+        ctx.stroke();
     } else if (stroke === true) {
         ctx.closePath();
         ctx.stroke();
@@ -262,121 +274,122 @@ function drawAnyShape(shapeCenterX, shapeCenterY, numberOfSides, size, [fill, st
 
 // my functions (make it snow assignments)
 // litterally copied the bubbles array and made some changes and improvements
-function createRandomSnowArray(total){
+function createRandomSnowArray(total) {
     let temp = [];
-    for(let n = 1; n <= total; n++){
+    for (let n = 1; n <= total; n++) {
         temp.push(newRandomSnow());
     }
     return temp;
 }
 
-function newSnow(initX, initY, initS, initO, initI, initColor){
-    return{
-        x:initX,
-        y:initY,
-        s:initS,
-        o:initO,
-        i:initI,
-        color:initColor
-    }
+function newSnow(initX, initY, initS, initO, initI, initColor) {
+    return {
+        x: initX,
+        y: initY,
+        s: initS,
+        o: initO,
+        i: initI,
+        color: initColor,
+    };
 }
 
 // changed the function to the function i made in the draw functions assigmnet
-function drawSnow(aSnow){
-    stroke(aSnow.color)
-    fill(aSnow.color)
-    drawAStar(aSnow.x, aSnow.y, aSnow.s, aSnow.o, aSnow.i, [true, true])
+function drawSnow(aSnow) {
+    stroke(aSnow.color);
+    fill(aSnow.color);
+    drawAStar(aSnow.x, aSnow.y, aSnow.s, aSnow.o, aSnow.i, [true, true]);
 }
 
 // changed the function so that x wouldn't be constantly being changed when drawsnows function is ran
-function moveSnow(aSnow, [moveX, moveY], intiX, intiY){
-    if(moveX === true){
+function moveSnow(aSnow, [moveX, moveY], intiX, intiY) {
+    if (moveX === true) {
         aSnow.x += intiX;
-    } if (moveY === true){
+    }
+    if (moveY === true) {
         aSnow.y += intiY;
     }
 }
 
 // added a layer function, changing the size to add a sense of depth (nothing to crazy)
-function newRandomSnow(){
-    let layer = randomInt(0, 5)
-    if(layer === 4){
-        return{
-            x:randomInt(-20, cnv.width),
-            y:0,
-            s:randomInt(6, 10),
-            o:randomInt(7,10),
-            i:randomInt(3,5),
-            moveX: randomDec(-2,2),
-            moveY: randomDec(3.25,4),
-            color:"white"
+function newRandomSnow() {
+    let layer = randomInt(0, 5);
+    if (layer === 4) {
+        return {
+            x: randomInt(-20, cnv.width),
+            y: 0,
+            s: randomInt(6, 10),
+            o: randomInt(7, 10),
+            i: randomInt(3, 5),
+            moveX: randomDec(-2, 2),
+            moveY: randomDec(3.25, 4),
+            color: "white",
         };
-    }  else if (layer === 3){
-        return{
-            x:randomInt(0, cnv.width),
-            y:0,
-            s:randomInt(6, 10),
-            o:randomInt(4, 7),
-            i:randomInt(1,3),
-            moveX: randomDec(-1.5,1.5),
-            moveY: randomDec(2.5,3.25),
-            color:"#d3d3d3"
-        }
-    }  else if (layer === 2){
-        return{
-            x:randomInt(0, cnv.width),
-            y:0,
-            s:randomInt(6, 10),
-            o:randomInt(4, 7),
-            i:randomInt(1,3),
-            moveX: randomDec(-1,1),
-            moveY: randomDec(1.75,2.5),
-            color:"#979291"
-        }
-    }  else {
-        return{
-            x:randomInt(0, cnv.width),
-            y:0,
-            s:randomInt(6, 10),
-            o:randomInt(1,4),
-            i:0,
-            moveX: randomDec(-.5,.5),
-            moveY: randomDec(1,1.75),
-            color:"625A59"
-        }
+    } else if (layer === 3) {
+        return {
+            x: randomInt(0, cnv.width),
+            y: 0,
+            s: randomInt(6, 10),
+            o: randomInt(4, 7),
+            i: randomInt(1, 3),
+            moveX: randomDec(-1.5, 1.5),
+            moveY: randomDec(2.5, 3.25),
+            color: "#d3d3d3",
+        };
+    } else if (layer === 2) {
+        return {
+            x: randomInt(0, cnv.width),
+            y: 0,
+            s: randomInt(6, 10),
+            o: randomInt(4, 7),
+            i: randomInt(1, 3),
+            moveX: randomDec(-1, 1),
+            moveY: randomDec(1.75, 2.5),
+            color: "#979291",
+        };
+    } else {
+        return {
+            x: randomInt(0, cnv.width),
+            y: 0,
+            s: randomInt(6, 10),
+            o: randomInt(1, 4),
+            i: 0,
+            moveX: randomDec(-0.5, 0.5),
+            moveY: randomDec(1, 1.75),
+            color: "625A59",
+        };
     }
 }
 
 // keydown handler (Right Arrow = Add Snow) (Left Arrow = Remove Snow)
 function keydownHandler(event) {
     if (event.keyCode === 39) {
-        addSnow()
+        addSnow();
     } else if (event.keyCode === 37) {
         Snows.pop();
     }
 }
 
 // draw the snow
-function drawSnows(){
+function drawSnows() {
     // background color
-    background("black")
-    
+    background("black");
+
     // Loop for each snow entity
-    for(let i = 0; i < Snows.length; i++){
+    for (let i = 0; i < Snows.length; i++) {
         // moves the snowflakes
-        moveSnow(Snows[i], [true, true],  Snows[i].moveX, Snows[i].moveY);
+        moveSnow(Snows[i], [true, true], Snows[i].moveX, Snows[i].moveY);
 
         // makes the snowflakes move infinitlyby creating horizontal and vertical boundries
-        if (Snows[i].y > cnv.height + 3){
+        if (Snows[i].y > cnv.height + 3) {
             Snows[i].y = -2;
-        } 
-        console.log(cnv.width)
-        if (Snows[i].x > cnv.width + 3){
+        }
+        console.log(cnv.width);
+        if (Snows[i].x > cnv.width + 3) {
             Snows[i].x = -2;
-        } 
-        if (Snows[i].x < -3){
+        }
+        if (Snows[i].x < -3) {
             Snows[i].x = cnv.width + 2;
-        }   
+        }
 
         // draws the snowflake
         drawSnow(Snows[i]);
