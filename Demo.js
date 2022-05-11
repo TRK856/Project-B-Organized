@@ -15,7 +15,16 @@ requestAnimationFrame(drawGame);
 // Demo
 createCharacter(10, 10, 50, 50);
 addHitbox(player);
-addPlatform(10, 10, 100, 300);
+addPlatform(0, 200, cnv.width, cnv.height - 200);
+
+const lol = (element) => {
+    if (element.occurance === 1 && element.id === "GriddedGrassPlatform") {
+        return true;
+    } else {
+        return;
+    }
+};
+// console.log(world.find(lol));
 
 // Event Listners
 document.addEventListener("keydown", (e) => {
@@ -23,6 +32,7 @@ document.addEventListener("keydown", (e) => {
     moveCharacter();
     updateHitbox(player);
 });
+
 document.addEventListener("keyup", (e) => {
     player.keyHandler[e.code] = false;
 });
@@ -43,9 +53,11 @@ function findAllOccurancesID(obj, findValue) {
 // draw the game
 function drawGame() {
     background("orange");
+    drawWorld(world);
+    gravity(player);
     drawAllHitboxes("stroke");
     drawCharacter(player);
-    drawWorld(world);
+    collisonRedirect();
     requestAnimationFrame(drawGame);
 }
 
@@ -95,8 +107,10 @@ function createCharacter(x, y, w, h) {
         occurance: 1,
         hitboxCreate: true,
         hitboxActive: false,
+        hitboxCollided: false,
         keyHandler: {},
-        speed: 2,
+        speedX: 2,
+        speedY: 2,
         shape: "rect",
         x: x,
         y: y,
@@ -107,17 +121,28 @@ function createCharacter(x, y, w, h) {
 
 function moveCharacter() {
     if (player.keyHandler.ArrowLeft === true) {
-        player.x = player.x - player.speed;
+        player.x = player.x - player.speedX;
     }
     if (player.keyHandler.ArrowUp === true) {
-        player.y = player.y - player.speed;
+        if (player.hitboxCollided === true) {
+            player.speedY = 10;
+            jump(player);
+        }
     }
     if (player.keyHandler.ArrowRight === true) {
-        player.x = player.x + player.speed;
+        player.x = player.x + player.speedX;
     }
     if (player.keyHandler.ArrowDown === true) {
-        player.y = player.y + player.speed;
+        player.y = player.y + player.speedY;
     }
+    if (player.keyHandler.KeyR === true) {
+        location.reload();
+    }
+}
+
+function jump(playerObj) {
+    playerObj.y = -playerObj.speedY + playerObj.y;
+    playerObj.hitboxCollided = false;
 }
 
 // hitboxes
@@ -137,9 +162,45 @@ function addHitbox(obj) {
     }
 }
 
-function checkCollision(obj1, obj2) {
+function collisonRedirect() {
+    for (let i = 0; i < hitboxes.length; i++) {
+        if (hitboxes[i].id != "player") {
+            checkIfColliding(player, hitboxes[i]);
+        }
+    }
+}
+
+function collide(objColliding, CollisionObj) {
+    if (
+        objColliding.x + objColliding.w + objColliding.speedX >
+            CollisionObj.x &&
+        objColliding.x + objColliding.speedX <
+            CollisionObj.x + CollisionObj.w &&
+        objColliding.y + objColliding.h > CollisionObj.y &&
+        objColliding.y < CollisionObj.y + CollisionObj.h
+    ) {
+        objColliding.speedY = 0;
+        objColliding.hitboxCollided = true;
+    } else if (
+        objColliding.x + objColliding.w > CollisionObj.x &&
+        objColliding.x < CollisionObj.x + CollisionObj.w &&
+        objColliding.y + objColliding.h + objColliding.speedY >
+            CollisionObj.y &&
+        objColliding.y + objColliding.speedY < CollisionObj.y + CollisionObj.h
+    ) {
+        objColliding.speedX = 0;
+        objColliding.hitboxCollided = true;
+    }
+}
+
+function checkIfColliding(obj1, obj2) {
     if (obj1.shape === "rect" && obj2.shape === "rect") {
-        return rectCollideCheck(obj1, obj2);
+        if (rectCollideCheck(obj1, obj2) === true) {
+            collide(obj1, obj2);
+        } else {
+            obj1.hitboxCollided = false;
+            return;
+        }
     }
 }
 
@@ -171,6 +232,20 @@ function updateHitbox(obj) {
 }
 
 // world
+world.gravity = 0.05;
+world.gravitySpeed = 0;
+
+function gravity(obj) {
+    if (obj.hitboxCreate === true && obj.hitboxCollided === true) {
+        world.gravitySpeed = 0;
+        return;
+    } else {
+        world.gravitySpeed += world.gravity;
+        obj.y += world.gravitySpeed;
+        updateHitbox(player);
+    }
+}
+
 // Platform Functions
 function addPlatform(x, y, w, h) {
     world.push({
